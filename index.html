@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Biblioteca Interna</title>
+    <style>
+      :root {
+        --primary: #0f172a;
+        --secondary: #94a3b8;
+        --bg: #f1f5f9;
+        --card: #ffffff;
+        --border: #e2e8f0;
+        --error: #b91c1c;
+        --error-bg: #fee2e2;
+        --info-bg: #e0f2fe;
+        --info-border: #0ea5e9;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: var(--bg);
+        color: #111;
+      }
+
+      .container {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      .page {
+        display: none;
+      }
+
+      .page.active {
+        display: block;
+      }
+
+      /* LOGIN PAGE */
+      .login-shell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 24px;
+      }
+
+      .login-panel {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .login-panel h1 {
+        margin-top: 0;
+        font-size: 1.8rem;
+      }
+
+      .login-panel p {
+        color: #666;
+        margin-bottom: 24px;
+      }
+
+      /* DASHBOARD */
+      .dashboard-shell {
+        background: var(--bg);
+        min-height: 100vh;
+      }
+
+      .header-bar {
+        background: var(--card);
+        border-bottom: 1px solid var(--border);
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .header-bar strong {
+        font-size: 1rem;
+      }
+
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+      }
+
+      .panel h1,
+      .panel h2 {
+        margin-top: 0;
+      }
+
+      /* FORMS */
+      form {
+        display: grid;
+        gap: 16px;
+      }
+
+      label {
+        display: grid;
+        gap: 8px;
+        font-size: 0.95rem;
+        color: #334155;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-size: 1rem;
+        background: #f8fafc;
+        font-family: inherit;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: var(--card);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      /* BUTTONS */
+      button {
+        cursor: pointer;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 18px;
+        font-size: 1rem;
+        background: var(--primary);
+        color: #fff;
+        transition: opacity 0.2s;
+      }
+
+      button:hover {
+        opacity: 0.9;
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      button.secondary {
+        background: var(--secondary);
+      }
+
+      button.danger {
+        background: var(--error);
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      /* MESSAGES */
+      .error-message {
+        color: var(--error);
+        background: var(--error-bg);
+        padding: 12px 16px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+      }
+
+      .success-message {
+        color: #166534;
+        background: #dcfce7;
+        padding: 12px 16px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+      }
+
+      .info-box {
+        border-left: 4px solid var(--info-border);
+        background: var(--info-bg);
+        padding: 14px 16px;
+        color: var(--primary);
+        border-radius: 12px;
+        margin-bottom: 16px;
+      }
+
+      /* ITEMS */
+      .items-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .items-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+
+      .item-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .item-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 12px;
+      }
+
+      .item-meta strong {
+        font-size: 1.1rem;
+        flex: 1;
+      }
+
+      .item-type {
+        background: #f1f5f9;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+
+      .item-info {
+        display: grid;
+        gap: 4px;
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      .item-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+      }
+
+      .item-status {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        background: #f1f5f9;
+      }
+
+      .item-status.disponible {
+        background: #dcfce7;
+        color: #166534;
+      }
+
+      .item-status.prestado {
+        background: #fef08a;
+        color: #713f12;
+      }
+
+      .item-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .item-actions button {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+
+      /* SEARCH */
+      .search-bar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
+
+      .search-bar input {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .search-bar select {
+        flex: 0 1 150px;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 640px) {
+        .container {
+          padding: 12px;
+        }
+
+        .login-panel {
+          padding: 24px;
+        }
+
+        .header-bar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .items-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .panel {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="page active">
+      <div class="login-shell">
+        <div class="login-panel">
+          <h1>📚 Biblioteca</h1>
+          <p>Gestiona tu colección de libros y artículos.</p>
+
+          <div id="loginError" class="error-message" style="display: none;"></div>
+
+          <form id="loginForm" onsubmit="handleLogin(event)">
+            <label>
+              Email
+              <input type="email" id="loginEmail" value="admin@biblioteca.local" required />
+            </label>
+
+            <label>
+              Contraseña
+              <input type="password" id="loginPassword" value="admin123" required />
+            </label>
+
+            <button type="submit">Iniciar sesión</button>
+          </form>
+
+          <hr style="margin-top: 24px; border: none; border-top: 1px solid var(--border);" />
+          <p style="font-size: 0.9rem; color: #666; margin-bottom: 0;">
+            Credenciales de prueba: <strong>admin@biblioteca.local</strong> / <strong>admin123</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD PAGE -->
+    <div id="dashboardPage" class="page">
+      <div class="dashboard-shell">
+        <div class="header-bar">
+          <div>
+            👤 <strong id="userEmail"></strong> · <span id="userRole"></span>
+          </div>
+          <button class="secondary" onclick="handleLogout()">Cerrar sesión</button>
+        </div>
+
+        <div class="container">
+          <div class="panel">
+            <h1>Panel de biblioteca</h1>
+            <p>Gestiona libros y artículos en tu biblioteca personal.</p>
+            <div id="adminInfo" class="info-box" style="display: none;">
+              ✓ Tienes permisos de administrador para crear, editar y eliminar items.
+            </div>
+            <div id="userInfo" class="info-box" style="display: none;">
+              👁️ Solo lectura: necesitas ser admin para crear o editar items.
+            </div>
+          </div>
+
+          <div id="successMessage" class="success-message" style="display: none;"></div>
+          <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+          <!-- FORM FOR ADMIN -->
+          <div id="adminFormSection" style="display: none;">
+            <div class="panel">
+              <h2 id="formTitle">Nuevo item</h2>
+              <form id="itemForm" onsubmit="handleSaveItem(event)">
+                <label>
+                  Tipo
+                  <select id="itemType" required>
+                    <option value="libro">📖 Libro</option>
+                    <option value="artículo">📰 Artículo</option>
+                  </select>
+                </label>
+
+                <label>
+                  Título
+                  <input type="text" id="itemTitle" placeholder="Ingresa el título" required />
+                </label>
+
+                <label>
+                  Autor
+                  <input type="text" id="itemAuthor" placeholder="Ingresa el nombre del autor" />
+                </label>
+
+                <label>
+                  Año
+                  <input type="number" id="itemYear" placeholder="Ej: 2024" />
+                </label>
+
+                <label>
+                  Categoría
+                  <input type="text" id="itemCategory" placeholder="Ej: Ficción, Tecnología" />
+                </label>
+
+                <label>
+                  Estado
+                  <select id="itemStatus" required>
+                    <option value="disponible">Disponible</option>
+                    <option value="prestado">Prestado</option>
+                    <option value="en revisión">En revisión</option>
+                  </select>
+                </label>
+
+                <label>
+                  Notas
+                  <textarea id="itemNotes" placeholder="Notas adicionales (opcional)"></textarea>
+                </label>
+
+                <div class="form-actions">
+                  <button type="submit" id="submitBtn">Crear item</button>
+                  <button type="button" class="secondary" id="cancelBtn" onclick="cancelEdit()" style="display: none;">
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- SEARCH & FILTER -->
+          <div class="panel">
+            <div class="search-bar">
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Buscar por título, autor o categoría..."
+                onkeyup="filterItems()"
+              />
+              <select id="typeFilter" onchange="filterItems()">
+                <option value="">Todos los tipos</option>
+                <option value="libro">📖 Libro</option>
+                <option value="artículo">📰 Artículo</option>
+              </select>
+              <select id="statusFilter" onchange="filterItems()">
+                <option value="">Todos los estados</option>
+                <option value="disponible">Disponible</option>
+                <option value="prestado">Prestado</option>
+                <option value="en revisión">En revisión</option>
+              </select>
+            </div>
+
+            <div class="items-header">
+              <h2>Inventario</h2>
+              <span id="itemCount">0 items</span>
+            </div>
+
+            <div id="itemsGrid" class="items-grid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // APP STATE
+      let currentUser = null;
+      let editingId = null;
+      let allItems = [];
+
+      // INIT
+      function init() {
+        loadState();
+        if (currentUser) {
+          showDashboard();
+        } else {
+          showLogin();
+        }
+      }
+
+      // PERSISTENCE
+      function saveState() {
+        localStorage.setItem('user', JSON.stringify(currentUser));
+        localStorage.setItem('items', JSON.stringify(allItems));
+      }
+
+      function loadState() {
+        const user = localStorage.getItem('user');
+        const items = localStorage.getItem('items');
+
+        if (user) {
+          currentUser = JSON.parse(user);
+        }
+
+        if (items) {
+          allItems = JSON.parse(items);
+        } else {
+          // Init with sample data
+          allItems = [
+            {
+              id: 1,
+              type: 'libro',
+              title: 'Don Quijote',
+              author: 'Miguel de Cervantes',
+              year: 1605,
+              category: 'Literatura Clásica',
+              status: 'disponible',
+              notes: 'Primera edición',
+            },
+            {
+              id: 2,
+              type: 'artículo',
+              title: 'La inteligencia artificial en 2024',
+              author: 'Varios',
+              year: 2024,
+              category: 'Tecnología',
+              status: 'disponible',
+              notes: '',
+            },
+          ];
+        }
+      }
+
+      // LOGIN
+      function handleLogin(event) {
+        event.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const errorDiv = document.getElementById('loginError');
+
+        const hardcodedEmail = 'admin@biblioteca.local';
+        const hardcodedPassword = 'admin123';
+
+        if (email === hardcodedEmail && password === hardcodedPassword) {
+          currentUser = {
+            id: 1,
+            email,
+            role: 'admin',
+          };
+          saveState();
+          showDashboard();
+        } else if (email && password) {
+          errorDiv.textContent = 'Credenciales inválidas';
+          errorDiv.style.display = 'block';
+        }
+      }
+
+      function handleLogout() {
+        currentUser = null;
+        editingId = null;
+        saveState();
+        showLogin();
+      }
+
+      // PAGE NAVIGATION
+      function showLogin() {
+        document.getElementById('loginPage').classList.add('active');
+        document.getElementById('dashboardPage').classList.remove('active');
+      }
+
+      function showDashboard() {
+        document.getElementById('loginPage').classList.remove('active');
+        document.getElementById('dashboardPage').classList.add('active');
+        document.getElementById('userEmail').textContent = currentUser.email;
+        document.getElementById('userRole').textContent = currentUser.role;
+
+        if (currentUser.role === 'admin') {
+          document.getElementById('adminFormSection').style.display = 'block';
+          document.getElementById('adminInfo').style.display = 'block';
+          document.getElementById('userInfo').style.display = 'none';
+        } else {
+          document.getElementById('adminFormSection').style.display = 'none';
+          document.getElementById('adminInfo').style.display = 'none';
+          document.getElementById('userInfo').style.display = 'block';
+        }
+
+        renderItems();
+      }
+
+      // ITEMS CRUD
+      function handleSaveItem(event) {
+        event.preventDefault();
+        const form = document.getElementById('itemForm');
+
+        const item = {
+          id: editingId || Math.max(...allItems.map((i) => i.id), 0) + 1,
+          type: document.getElementById('itemType').value,
+          title: document.getElementById('itemTitle').value,
+          author: document.getElementById('itemAuthor').value,
+          year: document.getElementById('itemYear').value ? parseInt(document.getElementById('itemYear').value) : null,
+          category: document.getElementById('itemCategory').value,
+          status: document.getElementById('itemStatus').value,
+          notes: document.getElementById('itemNotes').value,
+        };
+
+        if (editingId) {
+          const index = allItems.findIndex((i) => i.id === editingId);
+          if (index >= 0) {
+            allItems[index] = item;
+            showMessage('success', 'Item actualizado correctamente');
+          }
+        } else {
+          allItems.push(item);
+          showMessage('success', 'Item creado correctamente');
+        }
+
+        saveState();
+        cancelEdit();
+        renderItems();
+      }
+
+      function editItem(id) {
+        const item = allItems.find((i) => i.id === id);
+        if (item) {
+          editingId = id;
+          document.getElementById('itemType').value = item.type;
+          document.getElementById('itemTitle').value = item.title;
+          document.getElementById('itemAuthor').value = item.author || '';
+          document.getElementById('itemYear').value = item.year || '';
+          document.getElementById('itemCategory').value = item.category || '';
+          document.getElementById('itemStatus').value = item.status || 'disponible';
+          document.getElementById('itemNotes').value = item.notes || '';
+          document.getElementById('formTitle').textContent = 'Editar item';
+          document.getElementById('submitBtn').textContent = 'Actualizar';
+          document.getElementById('cancelBtn').style.display = 'inline-block';
+          window.scrollTo(0, 0);
+        }
+      }
+
+      function cancelEdit() {
+        editingId = null;
+        document.getElementById('itemForm').reset();
+        document.getElementById('formTitle').textContent = 'Nuevo item';
+        document.getElementById('submitBtn').textContent = 'Crear item';
+        document.getElementById('cancelBtn').style.display = 'none';
+      }
+
+      function deleteItem(id) {
+        if (confirm('¿Estás seguro de que deseas eliminar este item?')) {
+          allItems = allItems.filter((i) => i.id !== id);
+          saveState();
+          showMessage('success', 'Item eliminado correctamente');
+          renderItems();
+        }
+      }
+
+      // FILTER & SEARCH
+      function filterItems() {
+        renderItems();
+      }
+
+      function getFilteredItems() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const typeFilter = document.getElementById('typeFilter').value;
+        const statusFilter = document.getElementById('statusFilter').value;
+
+        return allItems.filter((item) => {
+          const matchSearch =
+            !search ||
+            item.title.toLowerCase().includes(search) ||
+            (item.author && item.author.toLowerCase().includes(search)) ||
+            (item.category && item.category.toLowerCase().includes(search));
+
+          const matchType = !typeFilter || item.type === typeFilter;
+          const matchStatus = !statusFilter || item.status === statusFilter;
+
+          return matchSearch && matchType && matchStatus;
+        });
+      }
+
+      // RENDER
+      function renderItems() {
+        const filtered = getFilteredItems();
+        const grid = document.getElementById('itemsGrid');
+        const count = document.getElementById('itemCount');
+
+        count.textContent = `${filtered.length} item${filtered.length !== 1 ? 's' : ''}`;
+
+        if (filtered.length === 0) {
+          grid.innerHTML = '<div class="info-box">No hay items que coincidan con tu búsqueda.</div>';
+          return;
+        }
+
+        grid.innerHTML = filtered
+          .map(
+            (item) => `
+          <article class="item-card">
+            <div class="item-meta">
+              <strong>${item.title}</strong>
+              <span class="item-type">${item.type === 'libro' ? '📖 Libro' : '📰 Artículo'}</span>
+            </div>
+            <div class="item-info">
+              <div>${item.author ? `<strong>Autor:</strong> ${item.author}` : '<em>Sin autor</em>'}</div>
+              <div>${item.category ? `<strong>Categoría:</strong> ${item.category}` : ''}</div>
+              <div>${item.year ? `<strong>Año:</strong> ${item.year}` : ''}</div>
+              ${item.notes ? `<div><strong>Notas:</strong> ${item.notes}</div>` : ''}
+            </div>
+            <div class="item-footer">
+              <span class="item-status ${item.status}">${item.status}</span>
+              ${
+                currentUser.role === 'admin'
+                  ? `
+                <div class="item-actions">
+                  <button onclick="editItem(${item.id})">Editar</button>
+                  <button class="danger" onclick="deleteItem(${item.id})">Eliminar</button>
+                </div>
+              `
+                  : ''
+              }
+            </div>
+          </article>
+        `
+          )
+          .join('');
+      }
+
+      function showMessage(type, text) {
+        const successDiv = document.getElementById('successMessage');
+        const errorDiv = document.getElementById('errorMessage');
+
+        if (type === 'success') {
+          successDiv.textContent = text;
+          successDiv.style.display = 'block';
+          setTimeout(() => (successDiv.style.display = 'none'), 3000);
+        } else {
+          errorDiv.textContent = text;
+          errorDiv.style.display = 'block';
+          setTimeout(() => (errorDiv.style.display = 'none'), 3000);
+        }
+      }
+
+      // START
+      init();
+    </script>
+  </body>
+</html>
